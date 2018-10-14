@@ -86,13 +86,13 @@ def get_interface(config, args):
                 sys.exit("To complete the process you must supply a --verifier")
             request_key, request_secret = get_token(config, 'request')
             oauth_session = mucli.new_session(request_key=request_key, request_secret=request_secret)
-            print "    member_id:      %s" % oauth_session.fetch_access_token(args.verifier)
+            print "    member_id:      %s" % oauth_session.fetch_access_token(args.verifier, signature_method=mac.signature_method_plaintext)
             set_token(config, 'access', oauth_session.access_token.key, oauth_session.access_token.secret)
             access_granted()
             return None
         else:
             oauth_session = mucli.new_session()
-            oauth_session.fetch_request_token()
+            oauth_session.fetch_request_token(signature_method=mac.signature_method_plaintext)
 
             set_token(config, 'request', oauth_session.request_token.key, oauth_session.request_token.secret)
 
